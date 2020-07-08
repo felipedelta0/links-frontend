@@ -3,13 +3,16 @@ import { connect } from 'react-redux'
 import { Link } from 'react-router-dom'
 
 import Layout from '../../Layouts/Manage'
-import { linkList, setLinkToRemove } from '../../../actions/LinkActions'
+import { linkList, setLinkToRemove, linkRemove } from '../../../actions/LinkActions'
 
-const Links = ({ links, linkToRemove, linkList, setLinkToRemove }) => {
+const Links = ({ links, linkRemove, linkToRemove, linkList, setLinkToRemove }) => {
 
   useEffect(() => {
     linkList()
   }, [linkList])
+
+  const cancelDelete = (e) => setLinkToRemove(null)
+  const confirmDelete = (e) => linkToRemove ? linkRemove(linkToRemove) :  null
 
   return (
     <Layout>
@@ -50,6 +53,18 @@ const Links = ({ links, linkToRemove, linkList, setLinkToRemove }) => {
           )
         }
       ) : null }
+
+      { linkToRemove ? (
+        <div className='alert alert-danger rounded float-center shadow-bold'>
+          <h4 className='alert-heading'>Delete Confirmation!</h4>
+          <p>Are you sure you want to delete? This action cannot be undone.</p>
+          <hr />
+          <div className='d-flex justify-content-between'>
+            <button className='btn btn-outline-light' onClick={cancelDelete}>Cancel</button>
+            <button className='btn btn-danger' onClick={confirmDelete}>Delete</button>
+          </div>
+        </div>
+      ) : null }
       
     </Layout>
   )
@@ -62,4 +77,4 @@ const mapStateToProps = (state) => {
   }
 }
 
-export default connect(mapStateToProps, { linkList, setLinkToRemove })(Links)
+export default connect(mapStateToProps, { linkList, setLinkToRemove, linkRemove })(Links)
