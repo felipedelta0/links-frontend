@@ -4,16 +4,18 @@ import { useParams } from 'react-router-dom'
 import Layout from '../../../Layouts/Manage'
 import FormGroup from '../../../../components/FormGroup'
 import FormCheck from '../../../../components/FormCheck'
-import { linkGet, linkUpdate } from '../../../../actions/LinkActions'
+import { linkGet, linkUpdate, linkClear } from '../../../../actions/LinkActions'
 import { getFormData } from '../../../../helpers/form'
 
 
-const Edit = ({ link, linkGet }) => {
+const Edit = ({ link, linkGet, linkClear }) => {
 
   const { id } = useParams()
 
   useEffect(() => {
     linkGet(id)
+
+    return () => linkClear()
   }, [id, linkGet])
 
   const submitHandler = (e) => {
@@ -44,4 +46,4 @@ const mapStateToProps = (state) => {
   return { link: state.link.link }
 }
 
-export default connect(mapStateToProps, { linkGet, linkUpdate })(Edit)
+export default connect(mapStateToProps, { linkGet, linkUpdate, linkClear })(Edit)
